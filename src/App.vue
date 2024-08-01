@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import ThePiano from '@/components/ThePiano.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-  </header>
+  <main class="h-screen">
+    <section class="h-full p-10">
+      <ThePiano />
+    </section>
+  </main>
 </template>
