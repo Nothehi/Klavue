@@ -1,28 +1,53 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import TheKlavier from './TheKlavier.vue';
 
 interface Props {
     octaveNumber: number
+    start?: string,
+    end?: string
 }
-defineProps<Props>()
+const props = defineProps<Props>()
 
-const basicTones = ref(['C', 'D', 'E', 'F', 'G', 'A', 'B'])
-const basicSemitones = ref(['', 'C#', 'D#', '', 'F#', 'G#', 'A#', ''])
+const basicTones = ref(['c', 'd', 'e', 'f', 'g', 'a', 'b'])
+const basicSemitones = ref(['', 'c#', 'd#', '', 'f#', 'g#', 'a#', ''])
+
+const tones = computed(() => {
+    if (!props.start && !props.end) {
+        return basicTones.value
+    }
+
+    const startIdx = basicTones.value.findIndex((val) => val == props.start?.toLowerCase())
+    const endIdx = basicTones.value.findIndex((val) => val == props.end?.toLowerCase())
+
+    return basicTones.value.slice(startIdx, endIdx + 1)
+})
+
+const semitones = computed(() => {
+    if (!props.start && !props.end) {
+        return basicSemitones.value
+    }
+
+    const startIdx = basicTones.value.findIndex((val) => val == props.start?.toLowerCase())
+    const endIdx = basicTones.value.findIndex((val) => val == props.end?.toLowerCase())
+
+    return basicSemitones.value.slice(startIdx, endIdx + 2)
+})
 </script>
 
 <template>
     <div class="relative w-full h-full">
         <div class="flex flex-row items-center justify-center space-x-0.5 absolute top-0 w-full h-full">
-            <template v-for="(key, idx) in basicTones" :key="idx">
-                <TheKlavier :name="`${key}${octaveNumber}`" />
+            <template v-for="(key, idx) in tones" :key="idx">
+                <TheKlavier :name="`${key.toUpperCase()}${octaveNumber}`" />
             </template>
         </div>
 
         <div class="flex flex-row space-x-0.5 absolute top-0 w-full h-[55%]">
-            <template v-for="(key, idx) in basicSemitones" :key="idx">
-                <div class="w-full h-full first:w-1/2 last:w-1/2">
-                    <TheKlavier :name="`${key}${octaveNumber}`" :class="{ 'hidden': key === '' }" semitone />
+            <template v-for="(key, idx) in semitones" :key="idx">
+                <div class="w-full h-full first:w-1/2 last:w-1/2 first:invisible last:invisible">
+                    <TheKlavier :name="`${key.toUpperCase()}${octaveNumber}`" :class="{ 'invisible': key === '' }"
+                        semitone />
                 </div>
             </template>
         </div>
