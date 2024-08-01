@@ -46,8 +46,8 @@ const semitones = computed(() => {
         <div class="flex flex-row space-x-0.5 absolute top-0 w-full h-[55%]">
             <template v-for="(key, idx) in semitones" :key="idx">
                 <div class="w-full h-full first:w-1/2 last:w-1/2 first:invisible last:invisible">
-                    <TheKlavier :name="`${key.toUpperCase()}${octaveNumber}`" :class="{ 'invisible': key === '' }"
-                        semitone />
+                    <TheKlavier :name="`${key.toUpperCase().replace('#', '♯')}${octaveNumber}`"
+                        :class="{ 'invisible': key === '' }" semitone />
                 </div>
             </template>
         </div>
