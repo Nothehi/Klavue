@@ -3,53 +3,48 @@ import { computed, ref } from 'vue';
 import TheKlavier from './TheKlavier.vue';
 
 interface Props {
-    octaveNumber: number
+    number: number
     start?: string,
     end?: string
 }
 const props = defineProps<Props>()
 
-const basicTones = ref(['c', 'd', 'e', 'f', 'g', 'a', 'b'])
-const basicSemitones = ref(['', 'c#', 'd#', '', 'f#', 'g#', 'a#', ''])
-
-const tones = computed(() => {
+const basicOctave = ref(['c', 'c#', 'd', 'd#', 'e', '', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'])
+const octave = computed(() => {
     if (!props.start && !props.end) {
-        return basicTones.value
+        return basicOctave.value
     }
 
-    const startIdx = basicTones.value.findIndex((val) => val == props.start?.toLowerCase())
-    const endIdx = basicTones.value.findIndex((val) => val == props.end?.toLowerCase())
+    const startIdx = basicOctave.value.findIndex((val) => val == props.start?.toLowerCase().replace('#', ''))
+    const endIdx = basicOctave.value.findIndex((val) => val == props.end?.toLowerCase().replace('#', ''))
 
-    return basicTones.value.slice(startIdx, endIdx + 1)
+    return basicOctave.value.slice(startIdx, endIdx + 1)
 })
 
-const semitones = computed(() => {
-    if (!props.start && !props.end) {
-        return basicSemitones.value
-    }
-
-    const startIdx = basicTones.value.findIndex((val) => val == props.start?.toLowerCase())
-    const endIdx = basicTones.value.findIndex((val) => val == props.end?.toLowerCase())
-
-    return basicSemitones.value.slice(startIdx, endIdx + 2)
-})
+function isSemitone(note: string): boolean {
+    return note.includes('#') || note === ''
+}
 </script>
 
 <template>
     <div class="relative w-full h-full">
-        <div class="flex flex-row items-center justify-center space-x-0.5 absolute top-0 w-full h-full">
-            <template v-for="(key, idx) in tones" :key="idx">
-                <TheKlavier :name="`${key.toUpperCase()}${octaveNumber}`" />
+        <div class="flex flex-row items-center justify-center space-x-0.5 absolute w-full h-full">
+            <template v-for="(note, idx) in octave" :key="idx">
+                <TheKlavier v-if="!isSemitone(note)" :name="`${note.toUpperCase()}${number}`" />
             </template>
         </div>
 
-        <div class="flex flex-row space-x-0.5 absolute top-0 w-full h-[55%]">
-            <template v-for="(key, idx) in semitones" :key="idx">
-                <div class="w-full h-full first:w-1/2 last:w-1/2 first:invisible last:invisible">
-                    <TheKlavier :name="`${key.toUpperCase().replace('#', '♯')}${octaveNumber}`"
-                        :class="{ 'invisible': key === '' }" semitone />
+        <div class="flex flex-row space-x-0.5 absolute -top-1 w-full h-[55%]">
+            <div class="w-1/2 h-full"></div>
+
+            <template v-for="(note, idx) in octave" :key="idx">
+                <div v-if="isSemitone(note)" class="w-full h-full">
+                    <TheKlavier v-if="note !== ''" :name="`${note.toUpperCase().replace('#', '♯')}${number}`"
+                        semitone />
                 </div>
             </template>
+
+            <div class="w-1/2 h-full"></div>
         </div>
     </div>
 </template>

@@ -5,6 +5,6 @@ import TheOctave from './TheOctave.vue';
 
 <template>
   <div class="container flex flex-row w-full mx-auto h-full space-x-0.5">
-    <TheOctave :octave-number="4" />
+    <TheOctave :number="4" />
   </div>
 </template>
