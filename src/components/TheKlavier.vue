@@ -32,17 +32,15 @@ watch(() => klavier.active, () => {
 </script>
 
 <template>
-    <button v-if="!semitone" @mouseover="mouseover" @mousedown="klavier.active = true" @touchstart="touchstart"
+    <button @mouseover="mouseover" @mousedown="klavier.active = true" @touchstart="touchstart"
         @mouseleave="klavier.active = false" @mouseup="klavier.active = false" @touchend="klavier.active = false"
-        class="select-none border-gray-200 border-2 shadow-[0_0.4rem_0rem_rgba(229,231,235,1)] rounded-xl bg-white transition-all duration-75 h-full w-full flex justify-center items-end"
-        :class="{ '!shadow-none !border-sky-200 !bg-sky-50 translate-y-2': klavier.active }">
-        <span class="mb-4 text-sm font-medium">{{ name }}</span>
-    </button>
-
-    <button v-else @mouseover="mouseover" @mousedown="klavier.active = true" @touchstart="touchstart"
-        @mouseleave="klavier.active = false" @mouseup="klavier.active = false" @touchend="klavier.active = false"
-        class="select-none shadow-[0_0.4rem_0rem_rgba(41,37,36,1)] border-stone-800 text-stone-400 border-2 rounded-xl bg-stone-700 transition-all duration-75 h-full w-full flex justify-center items-end"
-        :class="{ '!shadow-none !border-gray-800 !bg-gray-950 translate-y-2': klavier.active }">
+        class="flex items-end justify-center w-full h-full transition-all duration-75 border-2 select-none rounded-xl"
+        :class="{
+            'bg-white border-gray-200 shadow-[0_0.4rem_0rem_rgba(229,231,235,1)]': !semitone,
+            '!shadow-none !border-sky-200 !bg-sky-50 translate-y-2': klavier.active && !semitone,
+            'bg-stone-700 border-stone-800 shadow-[0_0.4rem_0rem_rgba(41,37,36,1)] text-stone-400': semitone,
+            '!shadow-none !border-gray-800 !bg-gray-950 translate-y-2': klavier.active && semitone,
+        }">
         <span class="mb-4 text-sm font-medium">{{ name }}</span>
     </button>
 </template>
