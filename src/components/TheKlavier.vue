@@ -2,6 +2,7 @@
 import { reactive, watch } from 'vue';
 
 interface Props {
+    id: number,
     name: string,
     semitone?: boolean
 }

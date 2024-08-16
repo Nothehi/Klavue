@@ -9,7 +9,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const basicOctave = ref(['c', 'c#', 'd', 'd#', 'e', '', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'])
+const basicOctave = ref(['c', 'c#', 'd', 'd#', 'e', '', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'].map((note) => note ? `${note}${props.number}` : ''))
 const octave = computed(() => {
     if (!props.start && !props.end) {
         return basicOctave.value
@@ -30,7 +30,7 @@ function isSemitone(note: string): boolean {
     <div class="relative w-full h-full">
         <div class="flex flex-row items-center justify-center space-x-0.5 absolute w-full h-full">
             <template v-for="(note, idx) in octave" :key="idx">
-                <TheKlavier v-if="!isSemitone(note)" :name="`${note.toUpperCase()}${number}`" />
+                <TheKlavier v-if="!isSemitone(note)" :id="idx + (number - 1) * 12" :name="note.toUpperCase()" />
             </template>
         </div>
 
@@ -39,8 +39,8 @@ function isSemitone(note: string): boolean {
 
             <template v-for="(note, idx) in octave" :key="idx">
                 <div v-if="isSemitone(note)" class="w-full h-full">
-                    <TheKlavier v-if="note !== ''" :name="`${note.toUpperCase().replace('#', '♯')}${number}`"
-                        semitone />
+                    <TheKlavier v-if="note !== ''" :id="idx + (number - 1) * 12"
+                        :name="note.toUpperCase().replace('#', '♯')" semitone />
                 </div>
             </template>
 
