@@ -4,13 +4,22 @@ import { reactive, watch } from 'vue';
 interface Props {
     id: number,
     name: string,
-    semitone?: boolean
+    semitone?: boolean,
+    active?: boolean,
+    touchId?: number
 }
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const klavier = reactive({
-    active: false,
-    touchId: -1
+    active: props.active,
+    touchId: props.touchId
+})
+
+watch(() => props.active, () => klavier.active = props.active)
+watch(() => klavier.active, () => {
+    if (!klavier.active) {
+        klavier.touchId = -1
+    }
 })
 
 function mouseover(e: MouseEvent) {
@@ -25,10 +34,18 @@ function touchstart(e: TouchEvent) {
     klavier.active = true
 }
 
-watch(() => klavier.active, () => {
-    if (!klavier.active) {
-        klavier.touchId = -1
-    }
+function setActiveState(state: boolean) {
+    klavier.active = state;
+}
+
+function setTouchId(id: number) {
+    klavier.touchId = id
+}
+
+defineExpose({
+    name: props.name,
+    setActiveState,
+    setTouchId
 })
 </script>
 
