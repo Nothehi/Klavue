@@ -2,12 +2,11 @@
 import { computed, ref } from 'vue';
 import TheKlavier from './TheKlavier.vue';
 
-interface Props {
+const props = defineProps<{
     number: number
     start?: string,
     end?: string
-}
-const props = defineProps<Props>()
+}>()
 
 const klavierRefs = ref<Array<InstanceType<typeof TheKlavier> | null | unknown>>([]);
 const basicOctave = ref(['c', 'c#', 'd', 'd#', 'e', '', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'].map((note) => note ? `${note}${props.number}` : ''))

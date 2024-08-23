@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { reactive, watch } from 'vue';
 
-interface Props {
+const props = defineProps<{
     id: number,
     name: string,
     semitone?: boolean
-}
-const props = defineProps<Props>()
+}>()
 
 const klavier = reactive({
     active: false,
