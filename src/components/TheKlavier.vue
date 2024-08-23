@@ -4,18 +4,15 @@ import { reactive, watch } from 'vue';
 interface Props {
     id: number,
     name: string,
-    semitone?: boolean,
-    active?: boolean,
-    touchId?: number
+    semitone?: boolean
 }
 const props = defineProps<Props>()
 
 const klavier = reactive({
-    active: props.active,
-    touchId: props.touchId
+    active: false,
+    touchId: -1
 })
 
-watch(() => props.active, () => klavier.active = props.active)
 watch(() => klavier.active, () => {
     if (!klavier.active) {
         klavier.touchId = -1
@@ -35,7 +32,7 @@ function touchstart(e: TouchEvent) {
 }
 
 function setActiveState(state: boolean) {
-    klavier.active = state;
+    klavier.active = state
 }
 
 function setTouchId(id: number) {
